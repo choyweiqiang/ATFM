@@ -70,8 +70,8 @@ Run the application
 - node app.js
 
 If successful, you should see the following:
-Successfully enrolled admin user and imported it into the wallet
-Successfully registered and enrolled user appUser and imported it into the wallet
+- Successfully enrolled admin user and imported it into the wallet
+- Successfully registered and enrolled user appUser and imported it into the wallet
 
 Else, delete the wallet folder in the 'atfm-network/application-javascript' folder and re-run the application.
 
