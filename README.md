@@ -84,6 +84,11 @@ Else, delete the wallet folder in the 'atfm-network/application-javascript' fold
 - (GET REQUEST: Send a submit transaction sample request to both peers, and if both peers endorse the transaction, the endorsed proposal will be sent to the orderer to be committed by each of the peer's channel ledger)
 
 ### Clean Up
+Exit the app.js node.js application
+- Ctrl + c
+
+** this command only works if you’re using macOS
+
 After using the sample network, bring down the test network using network.sh script
 - cd ../../test-network
 - ./network.sh down
