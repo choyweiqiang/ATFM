@@ -42,7 +42,7 @@ Create a working directory, change directory (cd) into it, and execute a bash sc
 
 ### Clone the atfm repo
 In the same working directory, clone the repository into the folder:
-- git clone .
+- git clone https://github.com/choyweiqiang/ATFM.git
 
 ### Set up sample network
 In the working directory, change directory into atfm
