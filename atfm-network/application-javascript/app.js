@@ -21,6 +21,7 @@ const org1UserId = 'appUser';
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
+app.use(bodyParser.json());
 const port = 3000;
 
 var contract;
@@ -157,7 +158,8 @@ app.get('/airflow', async function (req, res, next) {
 		console.log('\n--> Evaluate Transaction: GetAllAssets, function returns all the current assets on the ledger');
 		let result = await contract.evaluateTransaction('GetAllAssets');
 		console.log(`*** Result: ${prettyJSONString(result.toString())}`);
-		res.status(200).json({response: prettyJSONString(result.toString())});
+		// res.status(200).json({response: prettyJSONString(result.toString())});
+		res.status(200).json(JSON.parse(result));
 	} catch (error) {
 		console.error(`******** FAILED to run the application: ${error}`);
 	} next();
@@ -166,7 +168,7 @@ app.get('/airflow', async function (req, res, next) {
 app.use('/test', async function (req, res, next) {
 	try {
 		console.log('\n--> Submit Transaction: CreateAsset, creates new asset with ID, country, and airflow arguments');
-		let result = await contract.submitTransaction('CreateAsset', 'flight4', 'Singapore', 'Flying to Bali');
+		let result = await contract.submitTransaction('CreateAsset', 'flight99', 'Singapore', 'Bali', 'SG Airlines', 'SG678', 'DWRP12');
 		console.log('*** Result: committed');
 		if (`${result}` !== '') {
 			console.log(`*** Result: ${prettyJSONString(result.toString())}`);
@@ -177,20 +179,19 @@ app.use('/test', async function (req, res, next) {
 	} next();
 });
 
-// app.post('/test2', async function (req, res, next) {
-// 	try {
-// 		console.log('\n--> Submit Transaction: CreateAsset, creates new asset with ID, country, and airflow arguments');
-// 		console.log(req.body);
-// 		let result = await contract.submitTransaction('CreateAsset', req.body.id, req.body.country, req.body.airflow);
-// 		console.log('*** Result: committed');
-// 		if (`${result}` !== '') {
-// 			console.log(`*** Result: ${prettyJSONString(result.toString())}`);
-// 			res.status(200).json({response: prettyJSONString(result.toString())});
-// 		}
-// 	} catch (error) {
-// 		console.error(`Failed to submit transaction: ${error}`);
-// 	} next();
-// });
+app.use('/newflight', async function (req, res, next) {
+	try {
+		console.log('\n--> Submit Transaction: CreateAsset, creates new asset with ID, country, and airflow arguments');
+		let result = await contract.submitTransaction('CreateAsset', req.body.id, req.body.fromcountry, req.body.tocountry, req.body.airline, req.body.plane, req.body.route);
+		console.log('*** Result: committed');
+		if (`${result}` !== '') {
+			console.log(`*** Result: ${prettyJSONString(result.toString())}`);
+			res.status(200).json(JSON.parse(result.toString()));
+		}
+	} catch (error) {
+		console.error(`Failed to submit transaction: ${error}`);
+	} next();
+});
 
 
 app.listen(port, () => {

@@ -17,23 +17,32 @@ class atfm extends Contract {
         const assets = [
             {
                 ID: 'flight1',
-                Country: 'Singapore',
-                Airflow: 'Flying to KL'
+                FromCountry: 'Singapore',
+                ToCountry: 'KL',
+                Airline: 'SG Airlines',
+                Plane: 'SG123',
+                Route: 'LDA RWY123'
             },
             {
                 ID: 'flight2',
-                Country: 'Singapore',
-                Airflow: 'Flying to Penang'
+                FromCountry: 'Singapore',
+                ToCountry: 'Penang',
+                Airline: 'SG Airlines',
+                Plane: 'SG456',
+                Route: 'MIURA 2'
             },
             {
                 ID: 'flight3',
-                Country: 'KL',
-                Airflow: 'Flying to Singapore'
+                FromCountry: 'Penang',
+                ToCountry: 'Singapore',
+                Airline: 'SG Airlines',
+                Plane: 'SG458',
+                Route: 'MIURA 2'
             },
         ];
 
         for (const asset of assets) {
-            asset.docType = 'asset';
+            // asset.docType = 'asset';
             // example of how to write to world state deterministically
             // use convetion of alphabetic order
             // we insert data in alphabetic order using 'json-stringify-deterministic' and 'sort-keys-recursive'
@@ -43,7 +52,7 @@ class atfm extends Contract {
     }
 
     // CreateAsset issues a new asset to the world state with given details.
-    async CreateAsset(ctx, id, country, airflow) {
+    async CreateAsset(ctx, id, fromCountry, toCountry, airline, plane, route) {
         const exists = await this.AssetExists(ctx, id);
         if (exists) {
             throw new Error(`The asset ${id} already exists`);
@@ -51,9 +60,13 @@ class atfm extends Contract {
 
         const asset = {
             ID: id,
-            Country: country,
-            Airflow: airflow
+            FromCountry: fromCountry,
+            ToCountry: toCountry,
+            Airline: airline,
+            Plane: plane,
+            Route: route
         };
+        // asset.docType = 'asset';
         //we insert data in alphabetic order using 'json-stringify-deterministic' and 'sort-keys-recursive'
         await ctx.stub.putState(id, Buffer.from(stringify(sortKeysRecursive(asset))));
         return JSON.stringify(asset);
@@ -69,7 +82,7 @@ class atfm extends Contract {
     }
 
     // UpdateAsset updates an existing asset in the world state with provided parameters.
-    async UpdateAsset(ctx, id, country, airflow) {
+    async UpdateAsset(ctx, id, fromCountry, toCountry, airline, plane, route) {
         const exists = await this.AssetExists(ctx, id);
         if (!exists) {
             throw new Error(`The asset ${id} does not exist`);
@@ -78,8 +91,11 @@ class atfm extends Contract {
         // overwriting original asset with new asset
         const updatedAsset = {
             ID: id,
-            Country: country,
-            Airflow: airflow
+            FromCountry: fromCountry,
+            ToCountry: toCountry,
+            Airline: airline,
+            Plane: plane,
+            Route: route
         };
         // we insert data in alphabetic order using 'json-stringify-deterministic' and 'sort-keys-recursive'
         return ctx.stub.putState(id, Buffer.from(stringify(sortKeysRecursive(updatedAsset))));
@@ -101,10 +117,10 @@ class atfm extends Contract {
     }
 
     // TransferAsset updates the owner field of asset with given id in the world state.
-    async TransferAsset(ctx, id, newAirflow) {
+    async TransferAsset(ctx, id, newAirRoute) {
         const assetString = await this.ReadAsset(ctx, id);
         const asset = JSON.parse(assetString);
-        asset.Airflow = newAirflow;
+        asset.Route = newAirRoute;
         // we insert data in alphabetic order using 'json-stringify-deterministic' and 'sort-keys-recursive'
         return ctx.stub.putState(id, Buffer.from(stringify(sortKeysRecursive(asset))));
     }
