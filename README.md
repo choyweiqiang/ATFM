@@ -82,6 +82,18 @@ Else, delete the wallet folder in the 'atfm-network/application-javascript' fold
 - (GET REQUEST: Send an evaluate transaction (query) to one peer and retrieve all the current assets on the ledger)
 3. http://localhost:3000/test/
 - (GET REQUEST: Send a submit transaction sample request to both peers, and if both peers endorse the transaction, the endorsed proposal will be sent to the orderer to be committed by each of the peer's channel ledger)
+4. http://localhost:3000/newflight
+- (POST REQUEST: Send a submit transaction request to both peers, and if both peers endorse the transaction, the endorsed proposal will be sent to the orderer to be committed by each of the peer's channel ledger)
+- You can use Postman or any other clients to perform this POST request.
+- JSON Content: 
+- {
+    "id": "",
+    "fromcountry": "",
+    "tocountry": "",
+    "airline": "",
+    "plane": "",
+    "route": ""
+  }
 
 ### Clean Up
 Exit the app.js node.js application
